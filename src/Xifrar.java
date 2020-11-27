@@ -9,10 +9,10 @@ import java.security.PublicKey;
 import java.util.Arrays;
 
 public class Xifrar {
-
-    public SecretKey keygenKeyGeneration(int keySize) {
+    //1.1
+    public static SecretKey keygenKeyGeneration(int keySize) {
         SecretKey sKey = null;
-        if ((keySize == 128)||(keySize == 192)||(keySize == 256)) {
+        if ((keySize == 128) || (keySize == 192) || (keySize == 256)) {
             try {
                 KeyGenerator kgen = KeyGenerator.getInstance("AES");
                 kgen.init(keySize);
@@ -24,8 +24,8 @@ public class Xifrar {
         }
         return sKey;
     }
-
-    public SecretKey passwordKeyGeneration(String text, int keySize) {
+    //1.2
+    public static SecretKey passwordKeyGeneration(String text, int keySize){
         SecretKey sKey = null;
         if ((keySize == 128)||(keySize == 192)||(keySize == 256)) {
             try {
@@ -40,29 +40,29 @@ public class Xifrar {
         }
         return sKey;
     }
-
-    public byte[] encryptData(byte[] data, PublicKey pub) {
+    //1.3
+    public static byte[] encryptData(byte[] data, SecretKey sec) {
         byte[] encryptedData = null;
         try {
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding","SunJCE");
-            cipher.init(Cipher.ENCRYPT_MODE, pub);
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, sec);
             encryptedData =  cipher.doFinal(data);
         } catch (Exception  ex) {
-            System.err.println("Error xifrant: " + ex);
+            System.err.println("Error xifrant les dades: " + ex);
         }
         return encryptedData;
     }
-
-    public byte[] decryptData(byte[] data, PrivateKey sec) {
-        byte[] dencryptedData = null;
+    //1.4
+    public static byte[] decryptData(byte[] data, SecretKey sec) {
+        byte[] encryptedData = null;
         try {
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding","SunJCE");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, sec);
-            dencryptedData =   cipher.doFinal(data);
+            encryptedData =  cipher.doFinal(data);
         } catch (Exception  ex) {
-            System.err.println("Error xifrant: " + ex);
+            System.err.println("Error xifrant les dades: " + ex);
         }
-        return dencryptedData;
+        return encryptedData;
     }
 
 }
